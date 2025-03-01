@@ -12,6 +12,18 @@ namespace Pilotic.Tests.Domain.Models
             Assert.Equal("", ticket.Id);
             Assert.Equal("", ticket.Title);
             Assert.Equal("", ticket.Description);
+            Assert.Equal(TicketStatus.Unknown, ticket.Status);
+            Assert.Equal(TicketType.Undefined, ticket.Type);
+            Assert.Null((object)ticket.CreatedAt);
+            Assert.Null((object)ticket.UpdatedAt);
+            Assert.Null((object)ticket.DueDate);
+            Assert.Empty(ticket.Assignees);
+            Assert.Empty(ticket.Labels);
+            Assert.Null((object)ticket.ParentId);
+            Assert.Null((object)ticket.MilestoneId);
+            Assert.Empty(ticket.Comments);
+            Assert.False(ticket.Pinned);
+            Assert.False(ticket.ConversationLocked);
         }
 
         [Fact]

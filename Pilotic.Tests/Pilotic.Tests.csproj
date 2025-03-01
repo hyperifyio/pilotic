@@ -10,14 +10,27 @@
     <ItemGroup>
         <!-- xUnit packages for testing -->
         <PackageReference Include="bunit" Version="2.0.36-preview" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageReference Include="Moq" Version="4.20.72" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
     </ItemGroup>
 
     <ItemGroup>
         <!-- Reference your main project -->
+        <ProjectReference Include="..\Pilotic.Core\Pilotic.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Reference your main project -->
         <ProjectReference Include="..\Pilotic.Domain\Pilotic.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Reference your main project -->
+        <ProjectReference Include="..\Pilotic.API\Pilotic.API.csproj" />
     </ItemGroup>
 
     <ItemGroup>
