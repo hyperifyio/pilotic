@@ -3,7 +3,7 @@
 namespace Pilotic.Domain.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum TicketStatus
+public enum IssueStatus
 {
 
     [JsonPropertyName("unknown")]
@@ -18,7 +18,7 @@ public enum TicketStatus
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum TicketType
+public enum IssueType
 {
     [JsonPropertyName("undefined")]
     Undefined,
@@ -30,7 +30,7 @@ public enum TicketType
     Task,
 }
 
-public class Ticket
+public class Issue
 {
     [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
 
@@ -41,10 +41,10 @@ public class Ticket
     public string Description { get; set; } = string.Empty;
 
     [JsonPropertyName("status")]
-    public TicketStatus Status { get; set; } = TicketStatus.Unknown;
+    public IssueStatus Status { get; set; } = IssueStatus.Unknown;
 
     [JsonPropertyName("type")]
-    public TicketType Type { get; set; } = TicketType.Undefined;
+    public IssueType Type { get; set; } = IssueType.Undefined;
 
     [JsonPropertyName("created_at")]
     public DateTime? CreatedAt { get; set; }

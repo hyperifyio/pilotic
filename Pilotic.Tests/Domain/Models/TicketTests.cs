@@ -8,12 +8,12 @@ namespace Pilotic.Tests.Domain.Models
         [Fact]
         public void Ticket_Should_Have_Default_Values()
         {
-            var ticket = new Ticket();
+            var ticket = new Issue();
             Assert.Equal("", ticket.Id);
             Assert.Equal("", ticket.Title);
             Assert.Equal("", ticket.Description);
-            Assert.Equal(TicketStatus.Unknown, ticket.Status);
-            Assert.Equal(TicketType.Undefined, ticket.Type);
+            Assert.Equal(IssueStatus.Unknown, ticket.Status);
+            Assert.Equal(IssueType.Undefined, ticket.Type);
             Assert.Null((object)ticket.CreatedAt);
             Assert.Null((object)ticket.UpdatedAt);
             Assert.Null((object)ticket.DueDate);
@@ -29,7 +29,7 @@ namespace Pilotic.Tests.Domain.Models
         [Fact]
         public void UpdateTitle_Should_Change_Title()
         {
-            var ticket = new Ticket();
+            var ticket = new Issue();
             var newTitle = "New Title";
             ticket.Title = newTitle;
             Assert.Equal(newTitle, ticket.Title);
@@ -38,7 +38,7 @@ namespace Pilotic.Tests.Domain.Models
         [Fact]
         public void UpdateDescription_Should_Change_Description()
         {
-            var ticket = new Ticket();
+            var ticket = new Issue();
             var newDescription = "New Description";
             ticket.Description = newDescription;
             Assert.Equal(newDescription, ticket.Description);
