@@ -74,5 +74,8 @@ public class Issue
 
     [JsonPropertyName("conversation_locked")]
     public bool ConversationLocked { get; set; } = false;
+    
+    [JsonPropertyName("subIssues")]
+    public List<Issue> SubIssues { get; set; } = Array.Empty<Issue>().ToList();
 
 }

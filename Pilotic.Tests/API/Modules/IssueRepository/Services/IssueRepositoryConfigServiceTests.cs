@@ -1,9 +1,9 @@
 // `Pilotic.Tests/IssueRepository/Services/IssueRepositoryConfigServiceTests.cs`
 using Xunit;
 using Moq;
+using Pilotic.API.Modules.BaseRepository.Models;
+using Pilotic.API.Modules.BaseRepository.Services;
 using Pilotic.Core.Interfaces;
-using Pilotic.API.Modules.IssueRepository.Models;
-using Pilotic.API.Modules.IssueRepository.Services;
 
 namespace Pilotic.Tests.API.Modules.IssueRepository.Services;
 

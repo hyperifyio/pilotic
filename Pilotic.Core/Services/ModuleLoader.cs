@@ -12,7 +12,7 @@ public class ModuleLoader
         _configuration = configuration;
     }
 
-    public void RegisterModules<TInjectableClass>(IServiceCollection services)
+    public void RegisterSingletonModules<TInjectableClass>(IServiceCollection services)
         where TInjectableClass : class
     {
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
@@ -32,7 +32,9 @@ public class ModuleLoader
         foreach (var type in injectableTypes)
         {
             if (IsExplicitlyEnabled(type))
+            {
                 EnableTypeRecursively(type, dependencyMap, enabledSet);
+            }
         }
 
         // Register all enabled types explicitly with their interfaces.
@@ -48,6 +50,47 @@ public class ModuleLoader
 
             // Also register the class itself in case direct injections are needed
             services.AddSingleton(implementationType);
+        }
+    }
+
+    public void RegisterScopedModules<TInjectableClass>(IServiceCollection services)
+        where TInjectableClass : class
+    {
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
+            .ToArray();
+
+        var injectableTypes = assemblies
+            .SelectMany(asm => asm.GetTypes())
+            .Where(t => typeof(TInjectableClass).IsAssignableFrom(t)
+                        && !t.IsAbstract && !t.IsInterface)
+            .ToList();
+
+        var dependencyMap = CreateDependencyMap(injectableTypes);
+
+        var enabledSet = new HashSet<Type>();
+
+        foreach (var type in injectableTypes)
+        {
+            if (IsExplicitlyEnabled(type))
+            {
+                EnableTypeRecursively(type, dependencyMap, enabledSet);
+            }
+        }
+
+        // Register all enabled types explicitly with their interfaces.
+        foreach (var implementationType in enabledSet)
+        {
+            var interfaces = implementationType.GetInterfaces()
+                .Where(i => typeof(TInjectableClass).IsAssignableFrom(i));
+
+            foreach (var serviceType in interfaces)
+            {
+                services.AddScoped(serviceType, implementationType);
+            }
+
+            // Also register the class itself in case direct injections are needed
+            services.AddScoped(implementationType);
         }
     }
 

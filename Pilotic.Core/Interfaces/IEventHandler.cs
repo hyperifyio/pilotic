@@ -1,6 +1,6 @@
 namespace Pilotic.Core.Interfaces;
 
-public interface IEventHandler<TEvent> where TEvent : IEvent
+public interface IEventHandler<TEvent> : IInjectableScopedModule where TEvent : IEvent
 {
-    Task HandleAsync(TEvent @event, CancellationToken cancellationToken = default);
+    Task HandleEvent(TEvent @event, CancellationToken cancellationToken = default);
 }

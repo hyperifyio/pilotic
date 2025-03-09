@@ -18,7 +18,7 @@ public class AlternativeEventService : IEventBus
         _httpClientFactory = httpClientFactory;
     }
 
-    public Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
+    public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
     {
         throw new NotImplementedException();
     }
@@ -57,11 +57,11 @@ public class ModuleLoaderTests
         var moduleLoader = new ModuleLoader(config);
 
         // Act: Register all modules that implement IInjectableModule
-        moduleLoader.RegisterModules<IInjectableModule>(services);
+        moduleLoader.RegisterSingletonModules<IInjectableSingletonModule>(services);
 
         // Build the service provider to test resolution.
         var provider = services.BuildServiceProvider();
-        var registeredModules = provider.GetServices<IInjectableModule>();
+        var registeredModules = provider.GetServices<IInjectableSingletonModule>();
 
         // Assert:
         // Verify that at least one module is registered and that GitHubService,
@@ -101,7 +101,7 @@ public class ModuleLoaderTests
             var moduleLoader = new ModuleLoader(config);
 
             // Register modules implementing IInjectableModule.
-            moduleLoader.RegisterModules<IInjectableModule>(services);
+            moduleLoader.RegisterSingletonModules<IInjectableSingletonModule>(services);
             _provider = services.BuildServiceProvider();
         }
 
@@ -150,7 +150,7 @@ public class ModuleLoaderTests
             services.AddSingleton(mockLogger.Object);
             
             // Register modules that implement IInjectableModule
-            moduleLoader.RegisterModules<IInjectableModule>(services);
+            moduleLoader.RegisterSingletonModules<IInjectableSingletonModule>(services);
             // Explicitly register GitHubIssueManager as a consumer
             // services.AddSingleton<GitHubIssueManager>();
 
@@ -180,7 +180,7 @@ public class ModuleLoaderTests
         var moduleLoader = new ModuleLoader(config);
 
         // Act
-        moduleLoader.RegisterModules<IInjectableModule>(services);
+        moduleLoader.RegisterSingletonModules<IInjectableSingletonModule>(services);
         var provider = services.BuildServiceProvider();
 
         // Assert
@@ -210,7 +210,7 @@ public class ModuleLoaderTests
 
         var moduleLoader = new ModuleLoader(config);
 
-        moduleLoader.RegisterModules<IInjectableModule>(services);
+        moduleLoader.RegisterSingletonModules<IInjectableSingletonModule>(services);
         var provider = services.BuildServiceProvider();
 
         var implementations = provider.GetServices<IEventBus>().ToList();
@@ -230,10 +230,10 @@ public class ModuleLoaderTests
         var moduleLoader = new ModuleLoader(config);
 
         // Act
-        moduleLoader.RegisterModules<IInjectableModule>(services);
+        moduleLoader.RegisterSingletonModules<IInjectableSingletonModule>(services);
         var provider = services.BuildServiceProvider();
 
-        var modules = provider.GetServices<IInjectableModule>();
+        var modules = provider.GetServices<IInjectableSingletonModule>();
 
         // Assert
         Assert.Empty(modules);

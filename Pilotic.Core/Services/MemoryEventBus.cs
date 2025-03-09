@@ -6,19 +6,21 @@ namespace Pilotic.Core.Services;
 
 public class MemoryEventBus : IEventBus
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly ILogger<MemoryEventBus> _logger;
 
-    public MemoryEventBus(IServiceProvider serviceProvider, ILogger<MemoryEventBus> logger)
+    public MemoryEventBus(ILogger<MemoryEventBus> logger, IServiceScopeFactory serviceScopeFactory)
     {
-        _serviceProvider = serviceProvider;
+        _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
     }
 
-    public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
+    public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
         where TEvent : IEvent
     {
-        var handlers = _serviceProvider.GetServices<IEventHandler<TEvent>>().ToList();
+        using var scope = _serviceScopeFactory.CreateScope();
+        
+        var handlers = scope.ServiceProvider.GetServices<IEventHandler<TEvent>>();;
 
         if (!handlers.Any())
         {
@@ -28,7 +30,7 @@ public class MemoryEventBus : IEventBus
 
         foreach (var handler in handlers)
         {
-            await handler.HandleAsync(@event, cancellationToken);
+            await handler.HandleEvent(@event, cancellationToken);
         }
     }
 }
