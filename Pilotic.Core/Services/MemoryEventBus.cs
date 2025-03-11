@@ -30,7 +30,13 @@ public class MemoryEventBus : IEventBus
 
         foreach (var handler in handlers)
         {
-            await handler.HandleEvent(@event, cancellationToken);
+            try {
+                await handler.HandleEvent(@event, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error handling event {EventType} with handler {HandlerType}", typeof(TEvent).Name, handler.GetType().Name);
+            }
         }
     }
 }

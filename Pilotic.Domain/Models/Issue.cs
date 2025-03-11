@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Pilotic.Domain.Models;
 
@@ -32,8 +33,11 @@ public enum IssueType
 
 public class Issue
 {
-    [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
-
+    [Key]
+    [JsonPropertyName("issueId")] 
+    public string Id { get; set; } = string.Empty;
+    
+    [Required, MaxLength(255)]
     [JsonPropertyName("title")]
     public string Title { get; set; } = string.Empty;
 
@@ -46,29 +50,29 @@ public class Issue
     [JsonPropertyName("type")]
     public IssueType Type { get; set; } = IssueType.Undefined;
 
-    [JsonPropertyName("created_at")]
+    [JsonPropertyName("createdAt")]
     public DateTime? CreatedAt { get; set; }
 
-    [JsonPropertyName("updated_at")]
+    [JsonPropertyName("updatedAt")]
     public DateTime? UpdatedAt { get; set; }
 
-    [JsonPropertyName("due_date")]
+    [JsonPropertyName("dueDate")]
     public DateTime? DueDate { get; set; }
 
     [JsonPropertyName("assignees")]
-    public List<string> Assignees { get; set; } = Array.Empty<string>().ToList(); // GitHub usernames or internal IDs
+    public List<User> Assignees { get; set; } = Array.Empty<User>().ToList();
 
     [JsonPropertyName("labels")]
-    public List<string> Labels { get; set; } = Array.Empty<string>().ToList(); // Tags or categories
+    public List<Label> Labels { get; set; } = Array.Empty<Label>().ToList();
 
-    [JsonPropertyName("parent_id")]
+    [JsonPropertyName("parentId")]
     public string? ParentId { get; set; }
 
-    [JsonPropertyName("milestone_id")]
+    [JsonPropertyName("milestoneId")]
     public string? MilestoneId { get; set; }
 
     [JsonPropertyName("comments")]
-    public List<string> Comments { get; set; } = Array.Empty<string>().ToList(); // Comment IDs or message texts
+    public List<Comment> Comments { get; set; } = Array.Empty<Comment>().ToList();
 
     [JsonPropertyName("pinned")] public bool Pinned { get; set; } = false;
 
