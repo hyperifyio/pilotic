@@ -6,7 +6,7 @@ using Pilotic.API.Modules.GitHub.Services;
 
 namespace Pilotic.Tests.API.Modules.GitHub.Services;
 
-public class GitHubClientConfigServiceTests
+public class GitHubConfigServiceTests
 {
     [Fact]
     public void Constructor_ValidConfig_SetsApiKeyProperty()
@@ -14,11 +14,11 @@ public class GitHubClientConfigServiceTests
         // Arrange
         var mockService = new Mock<IConfigService>();
         mockService
-            .Setup(c => c.GetConfig<GitHubClientConfig>("GitHub"))
-            .Returns(new GitHubClientConfig { ApiKey = "TestApiKey" });
+            .Setup(c => c.GetConfig<GitHubConfig>("GitHub"))
+            .Returns(new GitHubConfig { ApiKey = "TestApiKey" });
 
         // Act
-        var sut = new GitHubClientConfigService(mockService.Object);
+        var sut = new GitHubConfigService(mockService.Object);
 
         // Assert
         Assert.Equal("TestApiKey", sut.ApiKey);
