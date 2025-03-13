@@ -23,7 +23,7 @@ public class Comment
     public string IssueId { get; set; } = string.Empty;
 
     [JsonPropertyName("issue")]
-    [ForeignKey("IssueId")]
+    [ForeignKey("Id")]
     public Issue Issue { get; set; } = null!;
     
 }

@@ -21,4 +21,8 @@
       <PackageReference Include="Scrutor" Version="6.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Pilotic.Core\Pilotic.Core.csproj" />
+    </ItemGroup>
+
 </Project>

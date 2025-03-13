@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Pilotic.Core.Interfaces;
 
 namespace Pilotic.Domain.Models;
 
@@ -31,7 +32,7 @@ public enum IssueType
     Task,
 }
 
-public class Issue
+public class Issue : IRepositoryEntity
 {
     [Key]
     [JsonPropertyName("issueId")] 

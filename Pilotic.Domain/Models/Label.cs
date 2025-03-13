@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Pilotic.Core.Interfaces;
 
 namespace Pilotic.Domain.Models;
 
-public class Label
+public class Label : IRepositoryEntity
 {
     [Key]
     [JsonPropertyName("label")]
-    public string Tag { get; set; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
 
     [Required, MaxLength(255)]
     [JsonPropertyName("description")]
