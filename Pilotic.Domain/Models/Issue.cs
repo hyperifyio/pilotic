@@ -22,14 +22,36 @@ public enum IssueStatus
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum IssueType
 {
-    [JsonPropertyName("undefined")]
+    [JsonPropertyName("n/a")]
     Undefined,
-    [JsonPropertyName("bug")]
+    [JsonPropertyName("Other")]
+    Other,
+    [JsonPropertyName("Bug")]
     Bug,
-    [JsonPropertyName("feature")]
+    [JsonPropertyName("Feature")]
     Feature,
-    [JsonPropertyName("task")]
+    [JsonPropertyName("Task")]
     Task,
+    [JsonPropertyName("Root")]
+    Root,
+    [JsonPropertyName("Story")]
+    Story,
+    [JsonPropertyName("Epic")]
+    Epic,
+    [JsonPropertyName("EpicList")]
+    EpicList,
+    [JsonPropertyName("Requirement")]
+    Requirement,
+    [JsonPropertyName("RequirementList")]
+    RequirementList,
+    [JsonPropertyName("Actor")]
+    Actor,
+    [JsonPropertyName("ActorList")]
+    ActorList,
+    [JsonPropertyName("Sprint")]
+    Sprint,
+    [JsonPropertyName("SprintList")]
+    SprintList,
 }
 
 public class Issue : IRepositoryEntity
