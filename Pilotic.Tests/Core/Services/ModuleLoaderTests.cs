@@ -18,7 +18,7 @@ public class AlternativeEventService : IEventBus
         _httpClientFactory = httpClientFactory;
     }
 
-    public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
+    public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
         throw new NotImplementedException();
     }
