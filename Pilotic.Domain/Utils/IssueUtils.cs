@@ -25,7 +25,13 @@ public static class IssueUtils
         toIssue.MilestoneId = fromIssue.MilestoneId;
     }
     
-    public static Issue? FindSubIssue(Issue rootIssue, string issueId)
+    /// <summary>
+    /// Find a sub-issue by its issue ID.
+    /// </summary>
+    /// <param name="rootIssue"></param>
+    /// <param name="issueId"></param>
+    /// <returns></returns>
+    public static Issue? FindChildIssue(Issue rootIssue, string issueId)
     {
         if (rootIssue.Id == issueId)
         {
@@ -33,13 +39,48 @@ public static class IssueUtils
         }
         foreach (var subIssue in rootIssue.SubIssues)
         {
-            var foundIssue = FindSubIssue(subIssue, issueId);
+            var foundIssue = FindChildIssue(subIssue, issueId);
             if (foundIssue != null)
             {
                 return foundIssue;
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Find all parent issues of an issue.
+    /// </summary>
+    /// <param name="issue"></param>
+    /// <param name="rootIssue"></param>
+    /// <returns></returns>
+    private static List<Issue> FindParentIssues(List<Issue> parents, Issue rootIssue, Issue issue)
+    {
+        if (issue.ParentId == null)
+        {
+            return parents;
+        }
+        var parentIssue = FindChildIssue(rootIssue, issue.ParentId);
+        if (parentIssue != null)
+        {
+            parents.Add(parentIssue);
+            return FindParentIssues(parents, rootIssue, parentIssue);
+        }
+        return parents;
+    }
+
+    /// <summary>
+    /// Find all parent issues of an issue. The root issue will be first, and the direct parent issue will be last.
+    /// </summary>
+    /// <param name="issue"></param>
+    /// <param name="rootIssue"></param>
+    /// <returns></returns>
+    public static List<Issue> FindParentIssues(Issue rootIssue, Issue issue)
+    {
+        var parentIssues = new List<Issue>();
+        FindParentIssues(parentIssues, rootIssue, issue);
+        parentIssues.Reverse();
+        return parentIssues;
     }
 
     /// <summary>
@@ -67,7 +108,7 @@ public static class IssueUtils
             markdown.Append(text, lastIndex, match.Index - lastIndex);
 
             var issueId = match.Groups[1].Value;
-            var issue = FindSubIssue(rootIssue, issueId);
+            var issue = FindChildIssue(rootIssue, issueId);
 
             if (issue != null)
             {
@@ -108,6 +149,13 @@ public static class IssueUtils
     }
     
     public static void ExportFullMarkdown(StringBuilder markdown, Issue issue, Issue rootIssue) {
+        ExportIssueMarkdown(markdown, issue, rootIssue);
+        foreach (var subIssue in issue.SubIssues) {
+            ExportFullMarkdown(markdown, subIssue, rootIssue);
+        }
+    }
+
+    public static void ExportIssueMarkdown(StringBuilder markdown, Issue issue, Issue rootIssue) {
         markdown.AppendLine("<a name=\"" + issue.Id + "\"></a>");
         markdown.AppendLine($"# {ToIssueTitlePrefix(issue.Type, issue.Id, issue.Title)}");
         markdown.AppendLine();
@@ -115,9 +163,6 @@ public static class IssueUtils
         markdown.AppendLine();
         markdown.AppendLine("----");
         markdown.AppendLine();
-        foreach (var subIssue in issue.SubIssues) {
-            ExportFullMarkdown(markdown, subIssue, rootIssue);
-        }
     }
 
     public static string ToIssueTitlePrefix(IssueType type, string issueId, string title)
