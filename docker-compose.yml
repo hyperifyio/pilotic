@@ -11,7 +11,7 @@ services:
       - ConnectionStrings__Default=Host=db;Database=issuemanagement;Username=issue_user;Password=securepassword
     ports:
       - "3000:3000"
-      - "8080:8080"
+      - "8000:8080"
     depends_on:
       - pilotic-db
     restart: unless-stopped
@@ -26,6 +26,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    restart: unless-stopped
+
+  pilotic-app:
+    image: pilotic-app:latest
+    build:
+      context: ./Pilotic.App
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pilotic-api
     restart: unless-stopped
 
 volumes:
