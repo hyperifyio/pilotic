@@ -13,10 +13,10 @@ services:
     environment:
       - ConnectionStrings__Default=Host=pilotic-db;Database=pilotic;Username=pilotic_user;Password=YourStrong@Passw0rd
       - ASPNETCORE_ENVIRONMENT=Development
-      - Email__SmtpServer=pilotic-smtp
+      - Email__SmtpHost=pilotic-smtp
       - Email__SmtpPort=1025
       - Email__FromEmail=noreply@pilotic.io
-      - Email__FromName=Pilotic
+      - Email__FromName=Pilotic.io
       - JWT__Secret=your-super-secret-key-with-minimum-32-characters
     depends_on:
       - pilotic-db
