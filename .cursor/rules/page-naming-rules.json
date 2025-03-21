@@ -1,0 +1,11 @@
+{
+  "name": "page-naming-convention",
+  "description": "Enforce consistent page naming convention where page components should end with 'Page'",
+  "pattern": "\\b(Login|Authentication|Main|Index|Settings|Issues|Issue)\\b\\.razor$",
+  "message": "Page components should end with 'Page'. For example:\n- 'Login.razor' → 'LoginPage.razor'\n- 'Authentication.razor' → 'AuthenticationPage.razor'\n- 'Main.razor' → 'MainPage.razor'\n- 'Index.razor' → 'IndexPage.razor'\n- 'Settings.razor' → 'SettingsPage.razor'\n- 'Issues.razor' → 'IssueListPage.razor'\n- 'Issue.razor' → 'IssueDetailsPage.razor'",
+  "severity": "warning",
+  "files": {
+    "include": ["**/Components/Pages/*.razor"],
+    "exclude": ["**/obj/**", "**/bin/**", "**/node_modules/**"]
+  }
+} 
