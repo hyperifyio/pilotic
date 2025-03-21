@@ -11,13 +11,20 @@ services:
     ports:
       - "4000:8080"
     environment:
-      - ConnectionStrings__Default=Host=pilotic-db;Database=pilotic;Username=pilotic_user;Password=YourStrong@Passw0rd
+      - ConnectionStrings__Default=Host=pilotic-db;Database=pilotic;Username=pilotic_user;Password=${POSTGRES_PASSWORD}
       - ASPNETCORE_ENVIRONMENT=Development
       - Email__SmtpHost=pilotic-smtp
       - Email__SmtpPort=1025
       - Email__FromEmail=noreply@pilotic.io
       - Email__FromName=Pilotic.io
-      - JWT__Secret=your-super-secret-key-with-minimum-32-characters
+      - JWT__Secret=${JWT_SECRET}
+      - GitHub__ApiKey=${GITHUB_API_KEY}
+      - OpenAi__ApiKey=${OPENAI_API_KEY}
+      - IssueRepository__Repository=${ISSUE_REPOSITORY}
+      - IssueRepository__RootIssueId=${ISSUE_ID}
+      - Logging__LogLevel__Default=Debug
+      - Logging__LogLevel__Microsoft=Warning
+      - Logging__LogLevel__System=Warning
     depends_on:
       - pilotic-db
       - pilotic-smtp
@@ -29,7 +36,7 @@ services:
     environment:
       - POSTGRES_DB=pilotic
       - POSTGRES_USER=pilotic_user
-      - POSTGRES_PASSWORD=YourStrong@Passw0rd
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -47,7 +54,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
-      - JWT__Secret=your-super-secret-key-with-minimum-32-characters
+      - JWT__Secret=${JWT_SECRET}
     depends_on:
       - pilotic-api
     restart: unless-stopped
