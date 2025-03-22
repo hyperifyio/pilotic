@@ -36,6 +36,8 @@ public class IconSourceGenerator : IIncrementalGenerator
         initContext.RegisterSourceOutput(svgContents, (spc, allSvgFiles) =>
         {
             var source = new StringBuilder();
+            source.AppendLine("#nullable enable");
+            source.AppendLine();
             source.AppendLine("namespace Pilotic.App.Icons");
             source.AppendLine("{");
             source.AppendLine("    public static class IconPaths");
