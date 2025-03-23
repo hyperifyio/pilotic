@@ -14,13 +14,13 @@ namespace Pilotic.Tests.Domain.Models
             Assert.Equal("", issue.Description);
             Assert.Equal(IssueStatus.Unknown, issue.Status);
             Assert.Equal(IssueType.Undefined, issue.Type);
-            Assert.Null((object)issue.CreatedAt);
-            Assert.Null((object)issue.UpdatedAt);
-            Assert.Null((object)issue.DueDate);
+            Assert.Null(issue.CreatedAt);
+            Assert.Null(issue.UpdatedAt);
+            Assert.Null(issue.DueDate);
             Assert.Empty(issue.Assignees);
             Assert.Empty(issue.Labels);
-            Assert.Null((object)issue.ParentId);
-            Assert.Null((object)issue.MilestoneId);
+            Assert.Null(issue.ParentId);
+            Assert.Null(issue.MilestoneId);
             Assert.Empty(issue.Comments);
             Assert.False(issue.Pinned);
             Assert.False(issue.ConversationLocked);

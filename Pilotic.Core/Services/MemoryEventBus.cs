@@ -18,21 +18,27 @@ public class MemoryEventBus : IEventBus, IDisposable
 
     private const int MaxConcurrentEvents = 5;
 
-    private class QueuedEvent(IEvent @event)
+    private class QueuedEvent
     {
-        public IEvent Event { get; } = @event;
-        public TaskCompletionSource<IEvent> CompletionSource { get; } = new();
+        public QueuedEvent(IEvent @event)
+        {
+            Event = @event ?? throw new ArgumentNullException(nameof(@event));
+            CompletionSource = new TaskCompletionSource<IEvent>();
+        }
+
+        public IEvent Event { get; }
+        public TaskCompletionSource<IEvent> CompletionSource { get; }
     }
     
     public MemoryEventBus(ILogger<MemoryEventBus> logger, IServiceScopeFactory serviceScopeFactory)
     {
-        _logger = logger;
-        _serviceScopeFactory = serviceScopeFactory;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         _eventQueue = Channel.CreateUnbounded<QueuedEvent>(new UnboundedChannelOptions { SingleReader = true });
         _cts = new CancellationTokenSource();
 
         // Start the background event processor
-        _backgroundTask = Task.Run<Task>(Task () => ProcessQueueAsync(_cts.Token));
+        _backgroundTask = Task.Run(ProcessQueueAsync, _cts.Token);
     }
     
     public void Dispose()
@@ -44,6 +50,9 @@ public class MemoryEventBus : IEventBus, IDisposable
     
     public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
+        if (@event == null)
+            throw new ArgumentNullException(nameof(@event));
+
         var queuedEvent = new QueuedEvent(@event);
         _eventQueue.Writer.TryWrite(queuedEvent);
         _logger.LogInformation("Event {EventType} enqueued", typeof(TEvent).Name);
@@ -77,24 +86,23 @@ public class MemoryEventBus : IEventBus, IDisposable
             _logger.LogError(ex, "Error handling event {EventType}", eventType.Name);
             queuedEvent.CompletionSource.SetException(ex);
         }
-        
     }
     
-    private async Task ProcessQueueAsync(CancellationToken token)
+    private async Task ProcessQueueAsync()
     {
         var semaphore = new SemaphoreSlim(MaxConcurrentEvents);
-        await foreach (var eventObj in _eventQueue.Reader.ReadAllAsync(token))
+        await foreach (var eventObj in _eventQueue.Reader.ReadAllAsync(_cts.Token))
         {
-            await semaphore.WaitAsync(token);
-            _ = HandleEventAsync(eventObj, token)
+            await semaphore.WaitAsync(_cts.Token);
+            _ = HandleEventAsync(eventObj, _cts.Token)
                 .ContinueWith(task =>
                 {
-                    if (task.IsFaulted)
+                    if (task.IsFaulted && task.Exception != null)
                     {
                         _logger.LogError(task.Exception, "Unhandled exception during event processing");
                     }
                     semaphore.Release();
-                }, token);
+                }, _cts.Token);
         }
     }
 }

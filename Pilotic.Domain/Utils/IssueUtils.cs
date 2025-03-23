@@ -121,7 +121,6 @@ public static class IssueUtils
             }
 
             // Update the last index position
-            // markdown.Length = markdown.Length; 
             lastIndex = match.Index + match.Length;
         }
 
