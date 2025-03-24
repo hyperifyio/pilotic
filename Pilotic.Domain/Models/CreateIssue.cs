@@ -5,9 +5,6 @@ namespace Pilotic.Domain.Models;
 public class CreateIssue
 {
 
-    [JsonPropertyName("issueId")]
-    public string Id { get; set; } = string.Empty;
-
     [JsonPropertyName("title")]
     public string Title { get; set; } = string.Empty;
 
