@@ -15,6 +15,7 @@ public static class IssueUtils
     public static void CopyIssueProperties(Issue toIssue, Issue fromIssue)
     {
         toIssue.Id = fromIssue.Id;
+        toIssue.ParentId = fromIssue.ParentId;
         toIssue.Title = fromIssue.Title;
         toIssue.Description = fromIssue.Description;
         toIssue.Status = fromIssue.Status;
