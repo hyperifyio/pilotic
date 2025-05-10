@@ -1,0 +1,9 @@
+{
+    "name": "use-heroicons",
+    "description": "Use HeroIcons instead of Bootstrap Icons or other icon libraries",
+    "pattern": "bi-|bi\\.|bi-",
+    "message": "Please use HeroIcons instead of Bootstrap Icons. Replace with appropriate HeroIcon component: <HeroIcon Name=\"icon-name\" Class=\"w-4 h-4\" />",
+    "severity": "warning",
+    "files": ["**/*.razor"],
+    "exclude": ["**/node_modules/**"]
+} 

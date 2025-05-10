@@ -1,0 +1,6 @@
+[submodule "Pilotic.App"]
+	path = Pilotic.App
+	url = https://github.com/hyperifyio/Pilotic.App.git
+[submodule "Pilotic.API"]
+	path = Pilotic.API
+	url = https://github.com/hyperifyio/Pilotic.API.git

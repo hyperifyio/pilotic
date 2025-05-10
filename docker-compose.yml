@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+
+  pilotic-api:
+    container_name: pilotic-api
+    image: pilotic-api:latest
+    build:
+      context: .
+      dockerfile: Pilotic.API/Dockerfile
+    ports:
+      - "4000:8080"
+    environment:
+      - ConnectionStrings__Default=Host=pilotic-db;Database=pilotic;Username=pilotic_user;Password=${POSTGRES_PASSWORD}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Email__SmtpHost=pilotic-smtp
+      - Email__SmtpPort=1025
+      - Email__FromEmail=noreply@pilotic.io
+      - Email__FromName=Pilotic.io
+      - JWT__Secret=${JWT_SECRET}
+      - GitHub__ApiKey=${GITHUB_API_KEY}
+      - OpenAi__ApiKey=${OPENAI_API_KEY}
+      - IssueRepository__Repository=${ISSUE_REPOSITORY}
+      - IssueRepository__RootIssueId=${ISSUE_ID}
+      - Logging__LogLevel__Default=Debug
+      - Logging__LogLevel__Microsoft=Warning
+      - Logging__LogLevel__System=Warning
+    depends_on:
+      - pilotic-db
+      - pilotic-smtp
+    restart: unless-stopped
+
+  pilotic-db:
+    container_name: pilotic-db
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=pilotic
+      - POSTGRES_USER=pilotic_user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "54320:5432"
+    volumes:
+      - pilotic-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pilotic-app:
+    image: pilotic-app:latest
+    container_name: pilotic-app
+    build:
+      context: .
+      dockerfile: Pilotic.App/Dockerfile
+    ports:
+      - "4242:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - JWT__Secret=${JWT_SECRET}
+    depends_on:
+      - pilotic-api
+    restart: unless-stopped
+
+  pilotic-smtp:
+    image: mailhog/mailhog
+    platform: linux/amd64
+    container_name: pilotic-smtp
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web interface
+    restart: unless-stopped
+
+volumes:
+  pilotic-db-data: {}

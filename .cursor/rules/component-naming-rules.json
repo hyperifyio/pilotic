@@ -1,0 +1,28 @@
+{
+  "name": "component-naming-convention",
+  "description": "Enforce consistent component naming conventions, preferring descriptive names like 'IssueList' over generic names like 'Issues'",
+  "pattern": "\\b(Issues|Users|Projects|Tasks|Items|List|Details|View)\\b",
+  "message": "Consider using more descriptive component names. For example:\n- 'Issues' → 'IssueList'\n- 'Users' → 'UserList'\n- 'Projects' → 'ProjectList'\n- 'Tasks' → 'TaskList'\n- 'Items' → 'ItemList'\n- 'List' → 'ListComponent'\n- 'Details' → 'DetailsView'\n- 'View' → 'ViewComponent'",
+  "severity": "warning",
+  "files": {
+    "include": ["**/*.razor", "**/*.cs"],
+    "exclude": ["**/obj/**", "**/bin/**", "**/node_modules/**"]
+  },
+  "rules": [
+    {
+      "name": "shared-component-naming-convention",
+      "description": "Shared components should not end with 'Page' suffix",
+      "pattern": "\\b\\w+Page\\.razor\\b",
+      "message": "Shared components should not end with 'Page'. Rename the component to remove the 'Page' suffix.\n\nExamples:\n- Change 'IssueListPage.razor' to 'IssueList.razor'\n- Change 'IssueDetailsPage.razor' to 'IssueDetails.razor'\n- Change 'SubIssueListItemPage.razor' to 'SubIssueListItem.razor'\n\nNote: Only page components in the Pages directory should end with 'Page'.",
+      "severity": "warning",
+      "include": [
+        "**/Components/Shared/*.razor"
+      ],
+      "exclude": [
+        "**/obj/**",
+        "**/bin/**",
+        "**/node_modules/**"
+      ]
+    }
+  ]
+} 

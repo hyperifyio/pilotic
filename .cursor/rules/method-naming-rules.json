@@ -1,0 +1,9 @@
+{
+    "name": "method-naming-convention",
+    "description": "Avoid using 'Async' suffix in method names unless there's a synchronous counterpart",
+    "pattern": "\\w+Async\\b",
+    "message": "Please avoid using 'Async' suffix in method names unless there's a synchronous counterpart. For example:\n- 'GetIssuesAsync' → 'GetIssues'\n- 'LoadDataAsync' → 'LoadData'\n- 'SaveChangesAsync' → 'SaveChanges'\n\nExceptions:\n- When there's a synchronous counterpart (e.g., 'SaveChanges' and 'SaveChangesAsync')\n- When the method is implementing an interface that requires the suffix",
+    "severity": "warning",
+    "files": ["**/*.cs", "**/*.razor"],
+    "exclude": ["**/obj/**", "**/bin/**", "**/node_modules/**"]
+} 
